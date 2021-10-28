@@ -77,6 +77,7 @@ conn.commit()
 conn.close()
 
 
+
 def render_template(template_name='contact.html', context={}):
     # html_str = ""
     with open(template_name, 'r') as f:
@@ -99,16 +100,13 @@ def app(environ, start_response):
         html = post['name'].value
         password = post['password'].value
         print(html,password)
-        if html==username and password==p:
-            start_response('200 OK', [('Content-Type', 'text/html')])
-            # return [html]
-            data =  render_template(template_name="contact.html",context={"path": html})
-            data = data.encode()
-            return [data]
-        else:
-            print("sehvsenn")
-
-
+     
+            
+    start_response('200 OK', [('Content-Type', 'text/html')])
+    # return [html]
+    data =  render_template(template_name="contact.html",context={"path": html})
+    data = data.encode()
+    return [data]
 
 
 
