@@ -1,5 +1,9 @@
 import cgi
 
+import sqlite3
+
+conn= sqlite3.connect('user.db')
+
 form = '''
 <html lang="en">
   <head>
@@ -49,7 +53,28 @@ form = '''
 </body>
 </html>
 '''
+c= conn.cursor()
 
+# c.execute(""" CREATE TABLE users (
+#     id integer,
+#     username text,
+#     passw text
+# )""")
+
+# c.execute("INSERT INTO users VALUES ('1', 'ayten', 'ayten1234')")
+
+print(c.execute("SELECT * FROM users"))
+result = c.fetchall()
+
+username = result[0][1]
+p = result[0][2]
+print(p,username)
+
+print(result)
+
+conn.commit()
+
+conn.close()
 
 
 def render_template(template_name='contact.html', context={}):
@@ -74,12 +99,17 @@ def app(environ, start_response):
         html = post['name'].value
         password = post['password'].value
         print(html,password)
+        if html==username and password==p:
+            start_response('200 OK', [('Content-Type', 'text/html')])
+            # return [html]
+            data =  render_template(template_name="contact.html",context={"path": html})
+            data = data.encode()
+            return [data]
+        else:
+            print("sehvsenn")
 
-    start_response('200 OK', [('Content-Type', 'text/html')])
-    # return [html]
-    data =  render_template(template_name="contact.html",context={"path": html})
-    data = data.encode()
-    return [data]
+
+
 
 
 
