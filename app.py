@@ -26,8 +26,8 @@ form = '''
             <div class="col">
                 <form action="/contact" method='POST'>
                     <div class="m-3 d-flex justify-content-center align-items-center flex-column">
-                        <input type="text" class="form-control" placeholder="Ad" name='name'>
-                        <input type="text" class="form-control mt-3" placeholder="Soyad">
+                        <input type="text" class="form-control" placeholder="Username" name='name'>
+                        <input type="password" class="form-control mt-3" placeholder="password" name='password'>
                         <input type="submit" class="btn btn-primary mt-4" value='Register'>
                     </div>
                 </form>
@@ -51,6 +51,7 @@ form = '''
 '''
 
 
+
 def render_template(template_name='contact.html', context={}):
     # html_str = ""
     with open(template_name, 'r') as f:
@@ -62,6 +63,7 @@ def app(environ, start_response):
     html = form
 
     if environ['REQUEST_METHOD'] == 'POST':
+        print('qwqww')
         post_env = environ.copy()
         post_env['QUERY_STRING'] = ''
         post = cgi.FieldStorage(
@@ -70,8 +72,8 @@ def app(environ, start_response):
             # keep_blank_values=True
         )
         html = post['name'].value
-        
-        print(html)
+        password = post['password'].value
+        print(html,password)
 
     start_response('200 OK', [('Content-Type', 'text/html')])
     # return [html]
