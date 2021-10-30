@@ -28,7 +28,7 @@ form = '''
     <div class="container-fluid p-0">
         <div class="row">
             <div class="col">
-                <form action="/contact" method='POST'>
+                <form action="/welcome" method='POST'>
                     <div class="m-3 d-flex justify-content-center align-items-center flex-column">
                         <input type="text" class="form-control" placeholder="Username" name='name'>
                         <input type="password" class="form-control mt-3" placeholder="password" name='password'>
@@ -65,12 +65,12 @@ c= conn.cursor()
 
 print(c.execute("SELECT * FROM users"))
 result = c.fetchall()
-
+print(result,'result')
 username = result[0][1]
 p = result[0][2]
 print(p,username)
 
-print(result)
+
 
 conn.commit()
 
@@ -97,16 +97,28 @@ def app(environ, start_response):
             environ=post_env,
             # keep_blank_values=True
         )
-        html = post['name'].value
+        user = post['name'].value
         password = post['password'].value
-        print(html,password)
+        print(user,password)
      
             
+        # try:
+        if user ==  username  and password == p:
+            print('correct',user)
+            start_response('200 OK', [('Content-Type', 'text/html')])
+    
+            data =  render_template(template_name="welcome.html",context={"path": user})
+            data = data.encode()
+            return[data]
+        else:
+            print("not correct")
     start_response('200 OK', [('Content-Type', 'text/html')])
-    # return [html]
+    
     data =  render_template(template_name="contact.html",context={"path": html})
     data = data.encode()
     return [data]
+        # except:
+        #     print(html,'No data')
 
 
 
